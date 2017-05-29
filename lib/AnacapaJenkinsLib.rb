@@ -1,4 +1,5 @@
-require "AnacapaJenkinsLib/version"
+require 'AnacapaJenkinsLib/version'
+require 'jenkins_api_client'
 
 module AnacapaJenkinsLib
   def self.configure(credentials)
