@@ -23,24 +23,52 @@ Or install it yourself as:
 ## Usage
 
 ### API
-The functionality of this API is encapsulated in the Jenkins module.
-
-The main class exposed right now is the 'lab' class.
-```
-# to create a new lab instance
-lab = Jenkins::Lab.new(
-  :git_provider_domain => "github.com",
-  :course_org => "ucsb-cs-test-org-1",
-  :credentials_id => "github.com-gareth-machine-user",
-  :lab_name => "lab00"
-  )
+The format of the config file is
+```YAML
+server_url: http://ci.domain.com:80
+username: admin
+password: <access token>
 ```
 
-Lab methods
- - __lab.makeGraderAndAssignentIfNotExist__ will check that jobs for this assignment have been created (creating them if they do not exist). You MUST call this before attempting to grade a student submission or update an assignment from the professors definition repository.
- - __assignment_job_name__ is an attribute accessor returning the name of the job for updating the assignment (
- _NOTE: this job does not necessarily exist, you must first trigger makeGraderAndAssignentIfNotExist to trigger its creation_)
- - __grader_job_name__ is an attribute accessor returning the name of the job for grading student submissions. To build this you must pass in an enviornment variable containnig the student's github profile as per https://github.com/project-anacapa/anacapa-jenkins-lib/blob/master/jobs/grader.groovy. The name of the enviornment variable of interest is 'github_user'
+The Module exposes the following methods/classes
+```ruby
+AnacapaJenkinsLib.configure(YAML.load('./credentials.yml')) # to configure the connection to the Jenkins instance
+
+AnacapaJenkinsLib.client # gets direct access to the Jenkins API Client, should be needed externally
+
+AnacapaJenkinsLib.Build.new(instance of job, buildNo) # returns a wrapper around the build with the given buildId
+
+Build.details(force: true) # fetches the details for a build. Force determines wether to refetch them or use the cached result from the last call to details
+
+Build.artifacts # makes a request to the jenkins server returning the list of build artifacts
+
+Build.downloadArtifact(artifactObj, baseUrl: nil) # takes an artifact object from the Build.artifacts call and downloads that artifact. baseUrl is automatically computed from cached build details. It can optionally be provided but is not necessary.
+
+Build.waitForBuildToFinish() # blocks thread and polls jenkins until the build finishes (or fails)
+
+
+AnacapaJenkinsLib.Job.new(jobName) # constructs a new job wrapper with the name provided
+
+Job.rebuild(env=nil) # rebuilds the job (optionally with the env provided)
+
+Job.currentBuild # returns a build that is the most recent build of the job. Nil if no builds.
+
+Job.getBuild(buildNo) # returns the build with the given build no. Nil if not found.
+
+Job.exists? # checks that the job actually exists on the Jenkins installation
+
+Job.destroy! # destroys the job on the server
+
+AnacapaJenkinsLib.Assignment.new(
+  :gitProviderDomain => "github.com",
+  :courseOrg => "ucsb-cs-test-org-1", # test
+  :credentialsId => "github.com-gareth-machine-user",
+  :labName => "lab00"
+)
+
+Assignment.checkJenkinsState # makes sure that the proper jobs for the assignment exist on Jenkins.
+```
+
 
 ### Jenkins Configuration
  - _TODO: move this to a more appropriate location_

@@ -21,10 +21,14 @@ module AnacapaJenkinsLib
     def initialize(job, buildNo)
       @job = job
       @buildNo = buildNo
+      @details = nil
     end
 
     def details(force: true)
-        return AnacapaJenkinsLib::client.job.get_build_details(@job.jobName, @buildNo)
+      if @detials.nil? || force then
+        @details = AnacapaJenkinsLib::client.job.get_build_details(@job.jobName, @buildNo)
+      end
+      return @details
     end
 
     def artifacts
@@ -33,7 +37,7 @@ module AnacapaJenkinsLib
 
     def downloadArtifact(artifact, baseUrl: nil) # NOTE: this input is the artifact object from artifacts
       if baseUrl.nil? then
-        baseUrl = self.details(:force => true)["url"]
+        baseUrl = self.details(:force => false)["url"]
       end
 
       uri = URI.parse("#{baseUrl}/artifact/#{artifact["relativePath"]}")
