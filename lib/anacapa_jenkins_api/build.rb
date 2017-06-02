@@ -8,14 +8,14 @@ module AnacapaJenkinsAPI
     def initialize(job, build_no)
       @job = job
       @build_no = build_no
-      @details = nil
+      @_details = nil
     end
 
     def details(force: true)
-      if @detials.nil? || force
-        @details = AnacapaJenkinsAPI.client.job.get_build_details(@job.job_name, @build_no)
+      if @_details.nil? || force
+        @_details = AnacapaJenkinsAPI.client.job.get_build_details(@job.job_name, @build_no)
       end
-      @details
+      @_details
     end
 
     def artifacts
