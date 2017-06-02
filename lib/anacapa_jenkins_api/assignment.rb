@@ -1,4 +1,3 @@
-require './job'
 require 'jenkins_api_client'
 
 module AnacapaJenkinsAPI
