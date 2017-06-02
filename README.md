@@ -1,6 +1,6 @@
-# AnacapaJenkinsLib
+# AnacapaJenkinsAPI
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/AnacapaJenkinsLib`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/anacapa_jenkins_api`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 TODO: Delete this and the text above, and describe your gem
 
@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'AnacapaJenkinsLib'
+gem 'anacapa_jenkins_api'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install AnacapaJenkinsLib
+    $ gem install anacapa_jenkins_api
 
 ## Usage
 
@@ -32,11 +32,11 @@ password: <access token>
 
 The Module exposes the following methods/classes
 ```ruby
-AnacapaJenkinsLib.configure(YAML.load('./credentials.yml')) # to configure the connection to the Jenkins instance
+AnacapaJenkinsAPI.configure(YAML.load('./credentials.yml')) # to configure the connection to the Jenkins instance
 
-AnacapaJenkinsLib.client # gets direct access to the Jenkins API Client, should be needed externally
+AnacapaJenkinsAPI.client # gets direct access to the Jenkins API Client, should be needed externally
 
-AnacapaJenkinsLib.Build.new(instance of job, buildNo) # returns a wrapper around the build with the given buildId
+AnacapaJenkinsAPI.Build.new(instance of job, buildNo) # returns a wrapper around the build with the given buildId
 
 Build.details(force: true) # fetches the details for a build. Force determines wether to refetch them or use the cached result from the last call to details
 
@@ -47,7 +47,7 @@ Build.downloadArtifact(artifactObj, baseUrl: nil) # takes an artifact object fro
 Build.waitForBuildToFinish() # blocks thread and polls jenkins until the build finishes (or fails)
 
 
-AnacapaJenkinsLib.Job.new(jobName) # constructs a new job wrapper with the name provided
+AnacapaJenkinsAPI.Job.new(jobName) # constructs a new job wrapper with the name provided
 
 Job.rebuild(env=nil) # rebuilds the job (optionally with the env provided)
 
@@ -59,7 +59,7 @@ Job.exists? # checks that the job actually exists on the Jenkins installation
 
 Job.destroy! # destroys the job on the server
 
-AnacapaJenkinsLib.Assignment.new(
+AnacapaJenkinsAPI.Assignment.new(
   :gitProviderDomain => "github.com",
   :courseOrg => "ucsb-cs-test-org-1", # test
   :credentialsId => "github.com-gareth-machine-user",
@@ -109,4 +109,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/AnacapaJenkinsLib.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/anacapa_jenkins_api.
