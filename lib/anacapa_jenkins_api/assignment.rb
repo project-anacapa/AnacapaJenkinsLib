@@ -38,7 +38,7 @@ module AnacapaJenkinsAPI
           # ignored
         end
 
-        setup_build = setup_assignment_job.rebuild({
+        setup_build = AnacapaJenkinsAPI.setup_assignment_job.rebuild({
             :callback_url => @callback_url,
             :git_provider_domain => @git_provider_domain,
             :course_org => @course_org,
