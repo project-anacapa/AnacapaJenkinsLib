@@ -3,16 +3,17 @@ require 'jenkins_api_client'
 
 module AnacapaJenkinsAPI
   class Assignment
+    attr_reader :callback_url
     attr_reader :git_provider_domain
     attr_reader :course_org
-    attr_reader :credentials_id
     attr_reader :credentials_id
     attr_reader :lab_name
 
     attr_reader :job_grader
     attr_reader :job_instructor
 
-    def initialize(git_provider_domain:, course_org:, credentials_id:, lab_name:)
+    def initialize(callback_url:, git_provider_domain:, course_org:, credentials_id:, lab_name:)
+      @callback_url = callback_url
       @git_provider_domain = git_provider_domain
       @course_org = course_org
       @credentials_id = credentials_id
@@ -23,7 +24,7 @@ module AnacapaJenkinsAPI
     end
 
     def check_jenkins_state
-      # checks that the projects exist on jenkins
+      # checks whether the projects exist on jenkins
       if !@job_instructor.exists? || !@job_grader.exists?
         # If one didn't exist, start over from scratch and
         # trigger a rebuild of both the instructor and grader jobs...
@@ -39,6 +40,7 @@ module AnacapaJenkinsAPI
         end
 
         setup_build = setup_assignment_job.rebuild({
+            :callback_url => @callback_url,
             :git_provider_domain => @git_provider_domain,
             :course_org => @course_org,
             :credentials_id => @credentials_id,
@@ -49,8 +51,10 @@ module AnacapaJenkinsAPI
 
         details = setup_build.details
 
+        # if not job success
         raise "An error was encountered while running the grader jobs." \
               "Status: #{details["result"]}" unless details["result"] == "SUCCESS"
+        # if one of the jobs still don't exist
         raise "Failed to create the expected jobs." unless !@job_instructor.exists? || !@job_grader.exists?
       end
     end
