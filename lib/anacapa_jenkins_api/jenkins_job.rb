@@ -1,7 +1,7 @@
 require 'jenkins_api_client'
 
 module AnacapaJenkinsAPI
-  class Job
+  class JenkinsJob
     attr_reader :job_name
     def initialize(job_name)
       @job_name = job_name

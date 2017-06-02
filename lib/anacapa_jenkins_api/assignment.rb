@@ -18,8 +18,8 @@ module AnacapaJenkinsAPI
       @credentials_id = credentials_id
       @lab_name = lab_name
 
-      @job_instructor = Job.new(assignment_job(@git_provider_domain, @course_org, @lab_name))
-      @job_grader = Job.new(grader_job(@git_provider_domain, @course_org, @lab_name))
+      @job_instructor = JenkinsJob.new("AnacapaGrader #{git_provider_domain} #{course_org} assignment-#{lab_name}")
+      @job_grader = JenkinsJob.new("AnacapaGrader #{git_provider_domain} #{course_org} grader-#{lab_name}")
     end
 
     def check_jenkins_state
