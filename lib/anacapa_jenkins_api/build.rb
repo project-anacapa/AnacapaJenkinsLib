@@ -28,7 +28,11 @@ module AnacapaJenkinsAPI
         base_url = self.details(:force => false)["url"]
       end
 
-      uri = URI.parse("#{base_url}/artifact/#{artifact["relativePath"]}")
+      download_artifact_url("#{base_url}/artifact/#{artifact["relativePath"]}")
+    end
+
+    def download_artifact_url(url)
+      uri = URI.parse(url)
 
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Get.new(uri.request_uri)
