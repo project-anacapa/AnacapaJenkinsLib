@@ -15,6 +15,19 @@ module AnacapaJenkinsAPI
       @client = JenkinsApi::Client.new(@credentials.merge({:log_level => 4}))
       @setup_assignment_job = JenkinsJob.new(AnacapaJenkinsAPI::SETUP_ASSIGNMENT)
     end
+
+    def make_request(url)
+      uri = URI.parse(url)
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      request.basic_auth(
+          AnacapaJenkinsAPI.credentials["username"],
+          AnacapaJenkinsAPI.credentials["password"]
+      )
+
+      http.request(request)
+    end
   end
 
 end

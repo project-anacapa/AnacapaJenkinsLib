@@ -28,21 +28,7 @@ module AnacapaJenkinsAPI
         base_url = self.details(:force => false)["url"]
       end
 
-      download_artifact_url("#{base_url}/artifact/#{artifact["relativePath"]}")
-    end
-
-    def download_artifact_url(url)
-      uri = URI.parse(url)
-
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Get.new(uri.request_uri)
-      request.basic_auth(
-          AnacapaJenkinsAPI.credentials["username"],
-          AnacapaJenkinsAPI.credentials["password"]
-      )
-      response = http.request(request)
-
-      response.body
+      AnacapaJenkinsAPI.make_request("#{base_url}/artifact/#{artifact["relativePath"]}").body
     end
 
     def wait_for_finish()
