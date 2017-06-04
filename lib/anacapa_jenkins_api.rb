@@ -22,8 +22,8 @@ module AnacapaJenkinsAPI
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Get.new(uri.request_uri)
       request.basic_auth(
-          AnacapaJenkinsAPI.credentials["username"],
-          AnacapaJenkinsAPI.credentials["password"]
+          AnacapaJenkinsAPI.credentials[:username],
+          AnacapaJenkinsAPI.credentials[:password]
       )
 
       http.request(request)
